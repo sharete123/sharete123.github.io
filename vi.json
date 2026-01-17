@@ -68,5 +68,8 @@
   "langBtn": "🌐 NGÔN NGỮ ▾",
     "confirmPayment": "Xác nhận thanh toán",
       "confirmPaymentWithPrice": "Xác nhận thanh toán ¥{price}",
-    "paymentSuccess": "Yêu cầu thanh toán đã được gửi"
+    "paymentSuccess": "Yêu cầu thanh toán đã được gửi",
+     "success_title": "Xác nhận thanh toán",
+    "success_desc": "Chúng tôi sẽ gửi thông tin dịch vụ đến email bạn đã ghi chú. Vui lòng kiểm tra hộp thư đến hoặc thư rác. Liên hệ với chúng tôi nếu có thắc mắc.",
+    "confirm_ok": "Xác nhận"
 }

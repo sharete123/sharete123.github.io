@@ -68,6 +68,8 @@
   "langBtn": "🌐 SPRACHE ▾",
     "confirmPayment": "Zahlung bestätigen",
     "confirmPaymentWithPrice": "Zahlung bestätigen ¥{price}",
-    "paymentSuccess": "Zahlungsaufforderung übermittelt"
-
+    "paymentSuccess": "Zahlungsaufforderung übermittelt",
+"success_title": "Zahlung bestätigt",
+    "success_desc": "Wir senden Ihre Zugangsdaten an die angegebene E-Mail-Adresse. Bitte prüfen Sie Ihren Posteingang oder Spam-Ordner. Kontaktieren Sie uns bei Fragen.",
+    "confirm_ok": "OK"
 }

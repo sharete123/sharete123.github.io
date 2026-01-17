@@ -68,5 +68,9 @@
   "langBtn": "🌐 LANGUAGE ▾",
     "confirmPayment": "Confirm Payment",
     "confirmPaymentWithPrice": "Confirm Payment ¥{price}",
-    "paymentSuccess": "Payment request submitted"
+    "paymentSuccess": "Payment request submitted",
+    
+    "success_title": "Payment Confirmed",
+  "success_desc": "We will send your service credentials to the email provided in the notes. Please check your inbox or spam folder. Contact us if you have any questions.",
+  "confirm_ok": "OK"
 }

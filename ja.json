@@ -68,5 +68,8 @@
   "langBtn": "🌐 言語 ▾",
     "confirmPayment": "支払いを確認する",
     "confirmPaymentWithPrice": "支払いを確認する ¥{price}",
-    "paymentSuccess": "支払いリクエストが送信されました"
+    "paymentSuccess": "支払いリクエストが送信されました",
+     "success_title": "支払い確認",
+    "success_desc": "サービス情報を備考欄のメールアドレスにお送りします。受信トレイまたは迷惑メールフォルダをご確認ください。ご不明な点はご連絡ください。",
+    "confirm_ok": "確定"
 }

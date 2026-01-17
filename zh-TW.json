@@ -68,5 +68,8 @@
   "langBtn": "🌐 語言 ▾",
     "confirmPayment": "確認支付",
     "confirmPaymentWithPrice": "確認支付 ¥{price}",
-    "paymentSuccess": "支付請求已提交"
+    "paymentSuccess": "支付請求已提交",
+     "success_title": "支付確認",
+    "success_desc": "我們會將服務憑證發送至您支付時備註的郵箱中。請檢查您的收件箱或垃圾郵件。如有問題可聯繫我們。",
+    "confirm_ok": "確定"
 }
