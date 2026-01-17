@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星链服务计划</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            background: #000;
+            padding: 40px 20px;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .stars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .satellite-orbit {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rotate 60s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .satellite {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 语言切换按钮 */
+        .language-switcher {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 999;
+            display: flex;
+            gap: 8px;
+            background: rgba(17, 17, 17, 0.9);
+            padding: 8px;
+            border-radius: 25px;
+            border: 1px solid #333;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #666;
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 18px;
+            min-width: 50px;
+        }
+        
+        .lang-btn:hover {
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        
+        .lang-btn.active {
+            background: #00ff00;
+            color: #000;
+            border-color: #00ff00;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+        
+        .common-features {
+            background: #111;
+            border: 1px solid #333;
+            padding: 24px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+        
+        .common-features h3 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            color: #00ff00;
+        }
+        
+        .common-features ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+        
+        .common-features li {
+            font-size: 15px;
+            color: #ccc;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .common-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .plans-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 30px;
+        }
+        
+        .section {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: #111;
+            padding: 20px 24px;
+            border-bottom: 1px solid #222;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 300;
+            margin: 0;
+        }
+        
+        .highlight {
+            color: #00ff00;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        
+        .plans-grid {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .plan-card {
+            background: #000;
+            padding: 20px 24px;
+            border-bottom: 1px solid #222;
+            position: relative;
+            transition: all 0.3s ease;
+            display: grid;
+            grid-template-columns: 120px 1fr 180px max-content;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .plan-card:last-child {
+            border-bottom: none;
+        }
+        
+        .plan-card:hover {
+            background: #111;
+        }
+        
+        .plan-card.featured {
+            background: #1a1a1a;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+        
+        .plan-card.featured:hover {
+            background: #222;
+        }
+        
+        .trial-label {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #ff4444;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .plan-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .plan-name {
+            font-size: 22px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+        
+        .plan-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .plan-features {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .plan-features-item {
+            margin-bottom: 2px;
+        }
+        
+        .price-wrapper {
+            text-align: right;
+        }
+        
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            justify-content: flex-end;
+            gap: 4px;
+            margin-bottom: 3px;
+        }
+        
+        .currency {
+            font-size: 20px;
+            font-weight: 300;
+        }
+        
+        .price {
+            font-size: 40px;
+            font-weight: 300;
+            line-height: 1;
+        }
+        
+        .price-details {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+        }
+        
+        .discount-badge {
+            display: inline-block;
+            background: #00ff00;
+            color: #000;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .cta-button {
+            padding: 12px 22px;
+            background: transparent;
+            border: 1px solid #666;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        
+        .cta-button:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .plan-card.featured .cta-button {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .plan-card.featured .cta-button:hover {
+            background: transparent;
+            color: #fff;
+        }
+        
+        .footer-note {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+        }
+        
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .payment-modal.active {
+            display: flex;
+        }
+        
+        .payment-content {
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 35px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            color: #999;
+            font-size: 28px;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .payment-header h2 {
+            font-size: 26px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        
+        .payment-plan-info {
+            font-size: 16px;
+            color: #00ff00;
+            margin-bottom: 8px;
+        }
+        
+        .payment-price {
+            font-size: 38px;
+            color: #fff;
+            font-weight: 300;
+        }
+        
+        .payment-methods {
+            margin: 25px 0;
+        }
+        
+        .payment-method {
+            background: #000000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .payment-method:hover {
+            border-color: #ffffff;
+            background: #1a1a1a;
+        }
+        
+        .payment-method.selected {
+            border-color: #bdbdbd;
+            background: #000000;
+        }
+        
+        .payment-method-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .payment-icon {
+            font-size: 28px;
+        }
+        
+        .payment-method-name {
+            font-size: 17px;
+            font-weight: 400;
+        }
+        
+        .payment-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #666;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .payment-method.selected .payment-radio {
+            border-color: #949494;
+        }
+        
+        .payment-method.selected .payment-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 11px;
+            height: 11px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+        
+        .payment-submit {
+            width: 100%;
+            padding: 16px;
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid #9b9b9b;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-submit:hover {
+            background: #141414;
+            transform: translateY(-2px);
+        }
+        
+        .payment-submit:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: #000000;
+            padding: 10px 18px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+        }
+        
+        .whatsapp-float span {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .wa-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .wa-modal.active {
+            display: flex;
+        }
+        
+        .wa-modal-content {
+            background: #000000;
+            border: 1px solid #333;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            position: relative;
+            color: #333;
+        }
+        
+        .wa-modal-content h3 {
+            margin-bottom: 10px;
+            color: #075E54;
+        }
+        
+        .wa-modal-content p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .wa-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .wa-qr-container {
+            background: #000000;
+            border: 1px solid #075E54;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .wa-qr-container img {
+            width: 100%;
+            max-width: 200px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .wa-direct-btn {
+            display: block;
+            background: #000000;
+            border: 1px solid #075E54;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .wa-direct-btn:hover {
+            background: #128C7E;
+        }
+        
+        @media (max-width: 768px) {
+            .language-switcher {
+                top: 20px;
+                left: 15px;
+                padding: 6px;
+            }
+            
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+                min-width: 40px;
+            }
+            
+            .whatsapp-float {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                padding: 10px;
+            }
+            
+            .whatsapp-float span {
+                display: none;
+            }
+            
+            body {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 28px;
+                margin-bottom: 25px;
+            }
+            
+            .plans-wrapper {
+                display: block;
+            }
+            
+            .plan-card {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                gap: 12px;
+            }
+            
+            .price-wrapper {
+                text-align: left;
+                width: 100%;
+            }
+            
+            .price-main {
+                justify-content: flex-start;
+            }
+            
+            .price-details {
+                text-align: left;
+            }
+            
+            .cta-button {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-background" id="starsContainer"></div>
+    
+    <!-- 语言切换器 -->
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="zh" onclick="switchLanguage('zh')">中文</button>
+        <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
+    </div>
+    
+    <!-- WhatsApp 浮动按钮 -->
+    <div class="whatsapp-float" id="whatsappFloat">
+        <svg width="40" height="28" viewBox="0 0 1192 770" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M736.863 57.4497C702.708 23.6781 657.484 3.41071 609.547 0.393047C561.61 -2.62462 514.201 11.8114 476.081 41.0333C437.961 70.2552 411.707 112.288 402.17 159.363C392.633 206.439 400.459 255.375 424.201 297.129L396.031 400.049L501.344 372.432C530.465 388.31 563.105 396.628 596.273 396.624V396.624C635.538 396.554 673.902 384.86 706.53 363.017C739.158 341.175 764.589 310.162 779.617 273.887C794.645 237.613 798.598 197.701 790.976 159.183C783.354 120.666 764.5 85.2672 736.789 57.4497H736.863ZM596.347 363.079C566.781 363.078 537.758 355.129 512.317 340.065L506.279 336.382L443.68 352.768L460.397 291.974L456.494 285.751C437.032 254.748 428.425 218.158 432.024 181.73C435.623 145.303 451.226 111.104 476.378 84.5096C501.531 57.9152 534.808 40.4331 570.978 34.8111C607.149 29.1891 644.162 35.7461 676.2 53.4514C708.238 71.1566 733.485 99.0063 747.971 132.623C762.457 166.239 765.362 203.716 756.228 239.164C747.095 274.611 726.441 306.018 697.514 328.448C668.586 350.878 633.026 363.06 596.421 363.079H596.347ZM686.747 239.428C681.813 236.924 657.289 224.92 652.833 223.263C648.378 221.606 644.99 220.796 641.786 225.767C638.583 230.738 628.972 241.895 626.063 245.209C623.154 248.523 620.282 248.891 615.311 246.461C600.708 240.671 587.216 232.399 575.432 222.011C564.586 211.966 555.28 200.377 547.815 187.618C544.942 182.647 547.52 179.959 549.987 177.492C552.454 175.025 554.958 171.711 557.352 168.802C559.389 166.294 561.052 163.503 562.286 160.517C562.95 159.15 563.261 157.638 563.19 156.12C563.119 154.602 562.669 153.126 561.881 151.826C560.666 149.323 550.834 124.909 546.599 115.004C542.365 105.098 538.462 106.645 535.553 106.498C532.644 106.35 529.366 106.498 526.052 106.498C523.538 106.565 521.066 107.152 518.79 108.224C516.515 109.295 514.487 110.826 512.833 112.721C507.236 117.97 502.785 124.321 499.763 131.375C496.74 138.428 495.21 146.031 495.269 153.704C495.269 178.155 513.054 201.574 515.521 205.035C517.988 208.497 550.539 258.502 600.213 280.007C609.446 283.997 618.886 287.488 628.493 290.464C638.621 293.533 649.325 294.201 659.756 292.416C669.293 290.98 689.214 280.412 693.265 268.812C697.315 257.213 697.389 247.271 696.174 245.209C694.958 243.147 691.865 241.895 686.747 239.428Z" fill="#25D366"/>
+        </svg>
+        <span data-i18n="whatsapp_contact"></span>
+    </div>
+    
+    <!-- WhatsApp 弹窗 -->
+    <div class="wa-modal" id="waModal">
+        <div class="wa-modal-content">
+            <button class="wa-close" id="waClose">×</button>
+            <h3 data-i18n="whatsapp_title"></h3>
+            <p data-i18n="whatsapp_description"></p>
+            
+            <div class="wa-qr-container">
+                <img src="whatsapp.png" alt="WhatsApp QR Code">
+            </div>
+            
+            <a href="https://wa.me/84922671657" target="_blank" class="wa-direct-btn" data-i18n="whatsapp_open"></a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1 data-i18n="page_title"></h1>
+        
+        <div class="common-features">
+            <h3 data-i18n="all_plans_include"></h3>
+            <ul>
+                <li data-i18n="feature_unlimited_traffic"></li>
+                <li data-i18n="feature_unlimited_devices"></li>
+                <li data-i18n="feature_one_on_one"></li>
+                <li data-i18n="feature_video_tutorial"></li>
+                <li data-i18n="feature_remote_help"></li>
+            </ul>
+        </div>
+        
+        <div class="plans-wrapper">
+            <!-- 短期计划 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="short_term_plans"></h2>
+                </div>
+                <div class="plans-grid">
+                    <div class="plan-card" data-plan="1个月" data-price="18">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_1month"></div>
+                            <div class="plan-subtitle" data-i18n="plan_1month_sub"></div>
+                        </div>
+                        <div class="plan-features"></div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">18</span>
+                            </div>
+                            <div class="price-details" data-i18n="price_per_month_18"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="3个月" data-price="54">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_3months"></div>
+                            <div class="plan-subtitle" data-i18n="plan_3months_sub"></div>
+                        </div>
+                        <div class="plan-features"></div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">54</span>
+                            </div>
+                            <div class="price-details" data-i18n="price_per_month_18"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="6个月" data-price="96">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_6months"></div>
+                            <div class="plan-subtitle" data-i18n="plan_6months_sub"></div>
+                        </div>
+                        <div class="plan-features"></div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">96</span>
+                                <span class="discount-badge" data-i18n="save_11"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_108"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="应急使用" data-price="2">
+                        <div class="plan-info">
+                            <div class="plan-name" style="color:wheat;" data-i18n="plan_emergency"></div>
+                            <div class="plan-subtitle" data-i18n="plan_emergency_sub"></div>
+                        </div>
+                        <div class="plan-features"></div>
+                        <div class="price-wrapper">
+                            <div class="price-main" style="color:wheat;">
+                                <span class="currency">¥</span>
+                                <span class="price">2</span>
+                            </div>
+                            <div class="price-details" data-i18n="instant_activation"></div>
+                        </div>
+                        <button class="cta-button" style="color:wheat;" data-i18n="select_plan"></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 长期计划 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span data-i18n="long_term_plans"></span>
+                        <span class="highlight" data-i18n="better_value"></span>
+                    </h2>
+                </div>
+                <div class="plans-grid">
+                    <div class="plan-card featured" data-plan="1年" data-price="169">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_1year"></div>
+                            <div class="plan-subtitle" data-i18n="plan_recommended"></div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="plan-features-item" data-i18n="includes_backup"></div>
+                        </div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">169</span>
+                                <span class="discount-badge" data-i18n="save_22"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_216"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="2年" data-price="289">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_2years"></div>
+                            <div class="plan-subtitle" data-i18n="plan_long_term"></div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="plan-features-item" data-i18n="includes_backup"></div>
+                        </div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">289</span>
+                                <span class="discount-badge" data-i18n="save_33"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_432"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="5年" data-price="589">
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_5years"></div>
+                            <div class="plan-subtitle" data-i18n="plan_ultra_long"></div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="plan-features-item" data-i18n="includes_backup"></div>
+                        </div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">589</span>
+                                <span class="discount-badge" data-i18n="save_45"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_1080"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card" data-plan="10年" data-price="1089">
+                        <div class="trial-label" data-i18n="free_trial"></div>
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_10years"></div>
+                            <div class="plan-subtitle" data-i18n="plan_best_value"></div>
+                        </div>
+                        <div class="plan-features" style="color:white;">
+                            <div class="plan-features-item" data-i18n="plan_10years_feature1"></div>
+                            <div class="plan-features-item" data-i18n="plan_10years_feature2"></div>
+                        </div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">1089</span>
+                                <span class="discount-badge" data-i18n="save_50"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_2160"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                    
+                    <div class="plan-card featured" data-plan="终身" data-price="1589">
+                        <div class="trial-label" data-i18n="free_trial"></div>
+                        <div class="plan-info">
+                            <div class="plan-name" data-i18n="plan_lifetime"></div>
+                            <div class="plan-subtitle" data-i18n="plan_most_affordable"></div>
+                        </div>
+                        <div class="plan-features" style="color:white;">
+                            <div class="plan-features-item" data-i18n="plan_lifetime_feature1"></div>
+                            <div class="plan-features-item" data-i18n="plan_lifetime_feature2"></div>
+                        </div>
+                        <div class="price-wrapper">
+                            <div class="price-main">
+                                <span class="currency">¥</span>
+                                <span class="price">1589</span>
+                                <span class="discount-badge" data-i18n="save_71"></span>
+                            </div>
+                            <div class="price-details" data-i18n="price_original_5600"></div>
+                        </div>
+                        <button class="cta-button" data-i18n="select_plan"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            <span data-i18n="footer_service"></span> | <span data-i18n="footer_enjoy"></span> | <span style="color: #ffffff;" data-i18n="footer_disclaimer"></span>
+        </div>
+    </div>
+    
+    <!-- 支付弹窗 -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <button class="close-btn" onclick="closePaymentModal()">×</button>
+            <div class="payment-header">
+                <h2 data-i18n="payment_confirm"></h2>
+                <div class="payment-plan-info" id="modalPlanName"></div>
+                <div class="payment-price">¥<span id="modalPrice">18</span></div>
+            </div>
+            
+            <div class="payment-notice">
+                <p style="color: #ff6666; font-size: 13px; line-height: 1.6; margin-bottom: 15px; padding: 12px; background: rgba(255, 102, 102, 0.1); border-radius: 6px; border-left: 3px solid #ff6666;" data-i18n="payment_notice">
+                </p>
+            </div>
+            
+            <div class="payment-methods" id="paymentMethodsSection">
+                <div class="payment-method" onclick="selectPaymentMethod(this, 'wechat')">
+                    <div class="payment-method-info">
+                        <div class="payment-icon"><img src="wechat-icon.png" alt="微信支付"></div>
+                        <div class="payment-method-name" data-i18n="payment_wechat"></div>
+                    </div>
+                    <div class="payment-radio"></div>
+                </div>
+                
+                <div class="payment-method" onclick="selectPaymentMethod(this, 'alipay')">
+                    <div class="payment-method-info">
+                        <div class="payment-icon"><img src="alipay-icon.png" alt="支付宝" style="width: 16px;height: 16px;"></div>
+                        <div class="payment-method-name" data-i18n="payment_alipay"></div>
+                    </div>
+                    <div class="payment-radio"></div>
+                </div>
+            </div>
+            
+            <div class="qrcode-section" id="qrcodeSection" style="display: none;">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div id="qrcodeContainer" style="display: inline-block; padding: 20px; background: white; border-radius: 8px;"></div>
+                </div>
+                <div class="qrcode-actions" style="display: flex; gap: 12px; margin-top: 15px;">
+                    <button class="back-btn" onclick="backToPaymentMethods()" title="返回" style="background: transparent; border: 1px solid #666; color: #fff; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 20px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">←</button>
+                    <button class="confirm-btn" onclick="showEmailConfirmationStep()" style="flex: 1; background: #1a1a1a; color: #ffffff; border: 1px solid #666; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;" data-i18n="payment_complete"></button>
+                </div>
+            </div>
+            
+            <button class="payment-submit" id="paymentSubmitBtn" disabled onclick="submitPayment()" data-i18n="payment_select_method">
+            </button>
+        </div>
+    </div>
+    
+    <!-- 重要提示弹窗 -->
+    <div class="notice-read-modal" id="noticeReadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 1002; justify-content: center; align-items: center;">
+        <div class="notice-read-content" style="background: #111; border: 2px solid #ff4444; border-radius: 12px; padding: 40px; max-width: 500px; width: 90%;">
+            <h3 style="font-size: 24px; font-weight: 500; margin-bottom: 25px; text-align: center; color: #ff4444;" data-i18n="notice_title"></h3>
+            <div class="notice-text" style="background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+                <p style="color: #ff4444; font-size: 16px; line-height: 1.8; margin: 0; text-align: center; font-weight: bold;" data-i18n="notice_text"></p>
+            </div>
+            <button class="notice-read-btn" onclick="confirmNoticeRead()" style="width: 100%; padding: 16px; background: #000000; color: white; border: 1px solid #9b9b9b; border-radius: 6px; font-size: 17px; font-weight: 600; cursor: pointer;" data-i18n="notice_confirm"></button>
+        </div>
+    </div>
+    
+    <script>
+        // 语言数据
+        const translations = {
+            zh: {
+                page_title: "星链服务计划",
+                whatsapp_contact: "联系我们",
+                whatsapp_title: "添加 WhatsApp",
+                whatsapp_description: "扫码或直接点击下方按钮跳转聊天",
+                whatsapp_open: "打开 WhatsApp",
+                all_plans_include: "✓ 所有套餐均包含",
+                feature_unlimited_traffic: "无限流量 不限速",
+                feature_unlimited_devices: "不限设备数量",
+                feature_one_on_one: "一对一指导",
+                feature_video_tutorial: "视频图文教程",
+                feature_remote_help: "可远程协助安装",
+                short_term_plans: "短期计划",
+                long_term_plans: "长期计划",
+                better_value: "— 更优惠",
+                plan_1month: "1个月",
+                plan_1month_sub: "灵活短期",
+                plan_3months: "3个月",
+                plan_3months_sub: "季度套餐",
+                plan_6months: "6个月",
+                plan_6months_sub: "半年套餐",
+                plan_emergency: "应急使用",
+                plan_emergency_sub: "24小时临时",
+                plan_1year: "1年",
+                plan_2years: "2年",
+                plan_5years: "5年",
+                plan_10years: "10年",
+                plan_lifetime: "终身",
+                plan_recommended: "推荐计划",
+                plan_long_term: "长期优惠",
+                plan_ultra_long: "超长优惠",
+                plan_best_value: "超值套餐",
+                plan_most_affordable: "最划算",
+                includes_backup: "+ 含备用节点",
+                plan_10years_feature1: "+ 500G深港IEPL专线",
+                plan_10years_feature2: "40多国家地区",
+                plan_lifetime_feature1: "+ 1000G深港IEPL专线",
+                plan_lifetime_feature2: "40多国家地区",
+                free_trial: "免费试用1天(2G流量)",
+                save_11: "省11%",
+                save_22: "省22%",
+                save_33: "省33%",
+                save_45: "省45%",
+                save_50: "省50%",
+                save_71: "省71%",
+                price_per_month_18: "每月 ¥18",
+                price_original_108: "原价 ¥108 | 每月 ¥16",
+                price_original_216: "原价 ¥216 | 每月 ¥14",
+                price_original_432: "原价 ¥432 | 每月 ¥12",
+                price_original_1080: "原价 ¥1080 | 每月 ¥9.8",
+                price_original_2160: "原价 ¥2160 | 每月 ¥9",
+                price_original_5600: "原价 ¥5600 | 一次付费终身",
+                instant_activation: "即时开通",
+                select_plan: "选择计划",
+                footer_service: "提供远程协助服务",
+                footer_enjoy: "让您随心所欲畅享网络",
+                footer_disclaimer: "免责声明:您有责任确保自己的行为符合您所在国家或地区的法律法规,任何因非法使用本网站信息而导致的法律后果,均由用户自行承担。",
+                payment_confirm: "确认支付",
+                payment_notice: "⚠️ 支付为捐赠给个人,不支持退款,为答谢您我们将共享赠送相关服务。在意请停止支付。",
+                payment_wechat: "微信支付",
+                payment_alipay: "支付宝",
+                payment_select_method: "请选择支付方式",
+                payment_complete: "完成",
+                notice_title: "⚠️ 重要提示",
+                notice_text: "支付中务必备注您的邮箱\n请不要备注任何敏感词",
+                notice_confirm: "我已阅读",
+                payment_qr_scan: "请使用{method}扫码"
+            },
+            en: {
+                page_title: "StarLink Service Plans",
+                whatsapp_contact: "Contact Us",
+                whatsapp_title: "Add WhatsApp",
+                whatsapp_description: "Scan QR code or click button below to chat",
+                whatsapp_open: "Open WhatsApp",
+                all_plans_include: "✓ All plans include",
+                feature_unlimited_traffic: "Unlimited Traffic & Speed",
+                feature_unlimited_devices: "Unlimited Devices",
+                feature_one_on_one: "One-on-One Support",
+                feature_video_tutorial: "Video Tutorials",
+                feature_remote_help: "Remote Installation Help",
+                short_term_plans: "Short-Term Plans",
+                long_term_plans: "Long-Term Plans",
+                better_value: "— Better Value",
+                plan_1month: "1 Month",
+                plan_1month_sub: "Flexible Short-term",
+                plan_3months: "3 Months",
+                plan_3months_sub: "Quarterly Package",
+                plan_6months: "6 Months",
+                plan_6months_sub: "Half-Year Package",
+                plan_emergency: "Emergency",
+                plan_emergency_sub: "24 Hours Temporary",
+                plan_1year: "1 Year",
+                plan_2years: "2 Years",
+                plan_5years: "5 Years",
+                plan_10years: "10 Years",
+                plan_lifetime: "Lifetime",
+                plan_recommended: "Recommended",
+                plan_long_term: "Long-term Discount",
+                plan_ultra_long: "Ultra Long Discount",
+                plan_best_value: "Best Value",
+                plan_most_affordable: "Most Affordable",
+                includes_backup: "+ Backup Nodes",
+                plan_10years_feature1: "+ 500G SZ-HK IEPL Line",
+                plan_10years_feature2: "40+ Countries",
+                plan_lifetime_feature1: "+ 1000G SZ-HK IEPL Line",
+                plan_lifetime_feature2: "40+ Countries",
+                free_trial: "Free 1-Day Trial (2GB)",
+                save_11: "Save 11%",
+                save_22: "Save 22%",
+                save_33: "Save 33%",
+                save_45: "Save 45%",
+                save_50: "Save 50%",
+                save_71: "Save 71%",
+                price_per_month_18: "¥18/month",
+                price_original_108: "Was ¥108 | ¥16/month",
+                price_original_216: "Was ¥216 | ¥14/month",
+                price_original_432: "Was ¥432 | ¥12/month",
+                price_original_1080: "Was ¥1080 | ¥9.8/month",
+                price_original_2160: "Was ¥2160 | ¥9/month",
+                price_original_5600: "Was ¥5600 | One-time Lifetime",
+                instant_activation: "Instant Activation",
+                select_plan: "Select Plan",
+                footer_service: "Remote assistance service provided",
+                footer_enjoy: "Enjoy the network at your will",
+                footer_disclaimer: "Disclaimer: You are responsible for ensuring that your actions comply with the laws and regulations of your country or region. Any legal consequences resulting from illegal use of this website are borne by the user.",
+                payment_confirm: "Confirm Payment",
+                payment_notice: "⚠️ Payment is a personal donation, non-refundable. We will share related services in gratitude. Please stop payment if you mind.",
+                payment_wechat: "WeChat Pay",
+                payment_alipay: "Alipay",
+                payment_select_method: "Please select payment method",
+                payment_complete: "Complete",
+                notice_title: "⚠️ Important Notice",
+                notice_text: "Please note your email in payment remarks\nDo not include any sensitive words",
+                notice_confirm: "I have read",
+                payment_qr_scan: "Please scan with {method}"
+            }
+        };
+        
+        let currentLang = 'zh';
+        let currentPlan = null;
+        let currentPrice = null;
+        let currentPlanTranslated = null;
+        
+        // 检测浏览器语言
+        function detectBrowserLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.toLowerCase().startsWith('zh')) {
+                return 'zh';
+            } else {
+                return 'en';
+            }
+        }
+        
+        // 切换语言
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 更新页面文本
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // 更新 HTML lang 属性
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            
+            // 保存语言偏好
+            localStorage.setItem('preferred_language', lang);
+        }
+        
+        // 页面加载时初始化语言
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred_language');
+            const defaultLang = savedLang || detectBrowserLanguage();
+            switchLanguage(defaultLang);
+            
+            // 初始化星空背景
+            initStarBackground();
+            
+            // 初始化事件监听器
+            initEventListeners();
+        });
+        
+        // 创建星空背景
+        function initStarBackground() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            const orbits = [
+                { size: 400, satellites: 3, speed: 20 },
+                { size: 600, satellites: 4, speed: 30 },
+                { size: 800, satellites: 5, speed: 40 },
+                { size: 1000, satellites: 6, speed: 50 }
+            ];
+            
+            orbits.forEach((orbit, orbitIndex) => {
+                const orbitElement = document.createElement('div');
+                orbitElement.className = 'satellite-orbit';
+                orbitElement.style.width = orbit.size + 'px';
+                orbitElement.style.height = orbit.size + 'px';
+                orbitElement.style.left = `calc(50% - ${orbit.size / 2}px)`;
+                orbitElement.style.top = `calc(50% - ${orbit.size / 2}px)`;
+                orbitElement.style.animationDuration = orbit.speed + 's';
+                orbitElement.style.animationDelay = orbitIndex * -5 + 's';
+                
+                for (let i = 0; i < orbit.satellites; i++) {
+                    const satellite = document.createElement('div');
+                    satellite.className = 'satellite';
+                    const angle = (360 / orbit.satellites) * i;
+                    const radius = orbit.size / 2;
+                    const x = Math.cos(angle * Math.PI / 180) * radius;
+                    const y = Math.sin(angle * Math.PI / 180) * radius;
+                    satellite.style.left = `calc(50% + ${x}px)`;
+                    satellite.style.top = `calc(50% + ${y}px)`;
+                    
+                    orbitElement.appendChild(satellite);
+                }
+                
+                starsContainer.appendChild(orbitElement);
+            });
+        }
+        
+        // 初始化事件监听器
+        function initEventListeners() {
+            // WhatsApp 按钮
+            const waFloat = document.getElementById('whatsappFloat');
+            const waModal = document.getElementById('waModal');
+            const waClose = document.getElementById('waClose');
+            
+            waFloat.addEventListener('click', () => {
+                waModal.classList.add('active');
+            });
+            
+            waClose.addEventListener('click', () => {
+                waModal.classList.remove('active');
+            });
+            
+            waModal.addEventListener('click', (e) => {
+                if (e.target === waModal) {
+                    waModal.classList.remove('active');
+                }
+            });
+            
+            // 选择计划按钮
+            document.querySelectorAll('.cta-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.plan-card');
+                    if (card) {
+                        const planName = card.getAttribute('data-plan');
+                        const price = card.getAttribute('data-price');
+                        openPaymentModal(planName, price);
+                    }
+                });
+            });
+            
+            // 支付弹窗关闭
+            document.getElementById('paymentModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closePaymentModal();
+                }
+            });
+        }
+        
+        let selectedPaymentMethod = null;
+        
+        // 获取翻译后的套餐名称
+        function getTranslatedPlanName(planKey) {
+            const planMapping = {
+                '1个月': 'plan_1month',
+                '3个月': 'plan_3months',
+                '6个月': 'plan_6months',
+                '应急使用': 'plan_emergency',
+                '1年': 'plan_1year',
+                '2年': 'plan_2years',
+                '5年': 'plan_5years',
+                '10年': 'plan_10years',
+                '终身': 'plan_lifetime'
+            };
+            
+            const translationKey = planMapping[planKey];
+            if (translationKey && translations[currentLang][translationKey]) {
+                return translations[currentLang][translationKey];
+            }
+            return planKey;
+        }
+        
+        function openPaymentModal(planName, price) {
+            currentPlan = planName;
+            currentPrice = price;
+            currentPlanTranslated = getTranslatedPlanName(planName);
+            
+            const planText = currentLang === 'zh' ? `${currentPlanTranslated}计划` : `${currentPlanTranslated} Plan`;
+            document.getElementById('modalPlanName').textContent = planText;
+            document.getElementById('modalPrice').textContent = price;
+            document.getElementById('paymentModal').classList.add('active');
+            
+            selectedPaymentMethod = null;
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('selected');
+            });
+            document.getElementById('paymentSubmitBtn').disabled = true;
+            
+            // 重置界面
+            document.getElementById('paymentMethodsSection').style.display = 'block';
+            document.getElementById('paymentSubmitBtn').style.display = 'block';
+            document.getElementById('qrcodeSection').style.display = 'none';
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('paymentMethodsSection').style.display = 'block';
+                document.getElementById('paymentSubmitBtn').style.display = 'block';
+                document.getElementById('qrcodeSection').style.display = 'none';
+            }, 300);
+        }
+        
+        function selectPaymentMethod(element, method) {
+            document.querySelectorAll('.payment-method').forEach(m => {
+                m.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedPaymentMethod = method;
+            
+            const submitBtn = document.getElementById('paymentSubmitBtn');
+            submitBtn.disabled = false;
+            const confirmText = currentLang === 'zh' 
+                ? `确认支付 ¥${document.getElementById('modalPrice').textContent}`
+                : `Confirm Payment ¥${document.getElementById('modalPrice').textContent}`;
+            submitBtn.textContent = confirmText;
+        }
+        
+        function submitPayment() {
+            if (!selectedPaymentMethod) {
+                const alertText = currentLang === 'zh' ? '请先选择支付方式' : 'Please select a payment method first';
+                alert(alertText);
+                return;
+            }
+            
+            // 显示重要提示弹窗
+            showNoticeRead();
+        }
+        
+        function showNoticeRead() {
+            document.getElementById('noticeReadModal').style.display = 'flex';
+        }
+        
+        function confirmNoticeRead() {
+            document.getElementById('noticeReadModal').style.display = 'none';
+            
+            // 隐藏支付方式，显示二维码界面
+            document.getElementById('paymentMethodsSection').style.display = 'none';
+            document.getElementById('paymentSubmitBtn').style.display = 'none';
+            document.getElementById('qrcodeSection').style.display = 'block';
+            
+            // 生成二维码内容
+            generateQRCode();
+        }
+        
+        function generateQRCode() {
+            const qrcodeContainer = document.getElementById('qrcodeContainer');
+            qrcodeContainer.innerHTML = '';
+            
+            const qrDisplay = document.createElement('div');
+            qrDisplay.style.cssText = 'width: 240px; height: 240px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #333; font-size: 15px; text-align: center; padding: 25px; box-sizing: border-box;';
+            
+            // 根据支付方式选择图片
+            const iconSrc = selectedPaymentMethod === 'wechat' ? 'alipay.png' : 'wechatpay.png';
+            const platformName = selectedPaymentMethod === 'wechat' 
+                ? (currentLang === 'zh' ? '微信' : 'WeChat')
+                : (currentLang === 'zh' ? '支付宝' : 'Alipay');
+            
+            const scanText = currentLang === 'zh' 
+                ? `请使用${platformName}扫码` 
+                : `Scan with ${platformName}`;
+            
+            qrDisplay.innerHTML = `
+                <div>
+                    <div style="margin-bottom: 12px;">
+                        <img src="${iconSrc}" alt="${platformName}" style="width: 180px; height: 180px; object-fit: contain;">
+                    </div>
+                    <div style="font-size: 12px; color: #666; margin-top: 10px;">${scanText}</div>
+                </div>
+            `;
+            qrcodeContainer.appendChild(qrDisplay);
+        }
+        
+        function backToPaymentMethods() {
+            document.getElementById('paymentMethodsSection').style.display = 'block';
+            document.getElementById('paymentSubmitBtn').style.display = 'block';
+            document.getElementById('qrcodeSection').style.display = 'none';
+        }
+        
+        function showEmailConfirmationStep() {
+            closePaymentModal();
+            const successText = currentLang === 'zh' 
+                ? '✅ 感谢您的支付！\n\n我们将尽快为您开通服务。' 
+                : '✅ Thank you for your payment!\n\nWe will activate your service soon.';
+            alert(successText);
+        }
+    </script>
+</body>
+</html>
